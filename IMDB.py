@@ -18,13 +18,15 @@ def dynasty():
     dic = {}
     list_ = []
 
-    print(filmography_list)
+    # print(filmography_list)
 
     
     if 'actor' not in filmography_list:
         data = filmography_list['actress']
     else:
         data = filmography_list['actor']
+    
+    # print(filmography_list)
 
     for item in data:
         if item.items()[1][1] == 'movie' and type(item.items()[2][1]) == int:
@@ -42,6 +44,7 @@ def dynasty():
     for item in sorted(dic.keys()):
         dic_reversed[item] = dic[item]
 
+    # print(dic_reversed)
     plt.bar(dic_reversed.keys(), dic_reversed.values(), 1, color='g')
     plt.xticks(rotation = 90)
     plt.show()
