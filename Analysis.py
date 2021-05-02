@@ -4,50 +4,56 @@ import pandas as pd
 import re
 import numpy as np
 import matplotlib.pyplot as plt
-# from IMDB import *
-import random
-
-
+ 
 ia=IMDb()
 per=Person()
+ 
+names=['Aamir Khan','Shah Rukh Khan','Amitabh Bachchan','Dilip Kumar',' Kamal Haasan',' Raj Kapoor','Rajesh Khanna',' Uttam Kumar',' Irrfan Khan',' Mohanlal',' Mammootty',
+'Dev Anand','Naseeruddin Shah','Amrish Puri',' Soumitra Chatterjee',' Anupam Kher',' Sanjeev Kumar','Ajay Devgn',' Akshay Kumar','Rajinikanth','Anil Kapoor','Dharmendra',
+'Hrithik Roshan',' Salman Khan','Madhavan','Abhishek Bachchan','Aashish Chaudhary','Abbas',' Amjad Khan',' Amol Palekar','Akshaye Khanna',' Arshad Warsi','Atul Kulkarni',
+' Asrani',' Ayushmann Khurrana',' Annu Kapoor','Ashish Vidyarthi']
+names=np.unique(names)
+c=0
+spike_point=[]
+for name in names:
+    name = name.strip()
+    person = ia.search_person(name)
+    try:
+        filmography=ia.get_person(person[0].personID, info=['filmography'])
+    except:
+        print(name+" Not Found")
+    filmography_list=filmography['filmography']
 
-actors = ['Aamir Khan', 'Salman Khan']
+    dic = {}
+    list_ = []
 
-#AK: 1992: 0th .... 2022: 20th
- #           2 .......    3
+    
+    
+    if 'actor' not in filmography_list:
+        data = filmography_list['actress']
+    else:
+        data = filmography_list['actor']
 
-#1 ...5... 2
+    for item in data:
+        if item.items()[1][1] == 'movie' and type(item.items()[2][1]) == int:
+            if str(item.items()[2][1]) not in dic:
+                dic[str(item.items()[2][1])] = 1
+            else:
+                dic[str(item.items()[2][1])] += 1
+            list_.append(item.items()[2][1])
 
+    for date in range(min(list_), max(list_)):
+        if str(date) not in dic:
+            dic[str(date)] = 0
 
-
-
-# def actorsdata(actors):
-#     actors = ['Aamir Khan', 'Salman Khan']
-#     for i in actors:
-#         person = ia.search_person(actors[i])
-#         filmography=ia.get_person(person[0].personID, info=['filmography'])
-#         filmography_list=filmography['filmography']
-#         data = filmography_list['actor']
-
-#     dic = {}
-#     list_ = []
-
-#     for item in data:
-#         if item.items()[1][1] == 'movie' and type(item.items()[2][1]) == int:
-#             if str(item.items()[2][1]) not in dic:
-#                 dic[str(item.items()[2][1])] = 1
-#             else:
-#                 dic[str(item.items()[2][1])] += 1
-#             list_.append(item.items()[2][1])
-
-#     for date in range(min(list_), max(list_)):
-#         if str(date) not in dic:
-#             dic[str(date)] = 0
-
-#     dic_reversed = {}
-#     for item in sorted(dic.keys()):
-#         dic_reversed[item] = dic[item]
-
-#     print(dic_reversed)
-
-print(actorsdata(actors))
+    dic_reversed = {}
+    for item in sorted(dic.keys()):
+        dic_reversed[item] = dic[item]
+    lis=list(dic_reversed.values())
+    s=sum(lis)
+    mean=np.mean(lis)
+    std=np.std(lis)
+    max_ind=np.argmax(lis)
+    print(name +" " +str(s) +" "+ str(mean)+" "+str(std))
+    spike_point.append(max_ind/len(lis))
+print(spike_point)
