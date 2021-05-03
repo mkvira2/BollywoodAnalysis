@@ -5,6 +5,7 @@
 1. Code creates histograms for individual actors’ filmography span
 ‘Aamir Khan’:
 ![image](https://user-images.githubusercontent.com/82107886/116833586-bde48b00-ab7f-11eb-84e9-1436ed317536.png)
+The above graph shows the histogram plot of Aamir Khan’s appearances in bollywood movies. The x-axis represents the years. And the y-axis represents the amount of films.
 
 #### **Analysis_actors.py:**
 2. Produces average filmography span (in years) for a list of 35 actors as a line graph
